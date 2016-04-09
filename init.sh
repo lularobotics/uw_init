@@ -86,7 +86,7 @@ echo -e "#   Password: private communication"
 echo -e "#   Email: your choice :)"
 user_confirm "# Update credentials" "n"
 if [[ "y" == "${USER_CONFIRM_RESULT}" ]];then
-    docker login
+    docker login hub.lularobotics.com 
 fi
 
 echo -e "###############################################################"
