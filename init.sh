@@ -1,4 +1,31 @@
 #!/bin/bash
+
+#-------------------------------------------------------------------------------
+# Verify that this script is being called from the top level of a workspace.
+echo "Verifying that the script is being called from the top level of a catkin workspace..."
+catkin_ws_error_msg="Note: This script should be called from the top level of a catkin workspace."
+# Check for src
+if [ ! -d src ]; then
+  echo -e $catkin_ws_error_msg
+  echo -e "Did not find src subdirectory"
+  exit 1
+fi
+# Check for CMakeLists.txt
+if [ ! -f src/CMakeLists.txt ]; then
+  echo -e $catkin_ws_error_msg
+  echo -e "Did not find src/CMakeLists.txt"
+  exit 1
+fi
+# Check that the CMakeLists.txt is a catkin toplevel cmake lists
+res=`grep CATKIN_TOPLEVEL src/CMakeLists.txt`
+if [ "$res" == "" ]; then
+  echo -e $catkin_ws_error_msg
+  echo "src/CMakeLists.txt does not seem to be a top-level catkin CMakeLists.txt file"
+  exit 1
+fi
+echo "[success]"
+#-------------------------------------------------------------------------------
+
 set -e
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)"
@@ -111,40 +138,53 @@ if [[ "n" == "${USER_CONFIRM_RESULT}" ]];then
 fi
 
 ################################################################################
-# setting up our workspace
+# Set up the workspace. By convention, this script should be called from the 
+# root of the desired workspace. That's verified up front. Add our packages
+# to a lula subdirectory of the src folder of the workspace. If we do not 
+# find a baxter_common, ask whether we should install it ourselves. If we 
+# do find one, ask whether we should update it.
 ################################################################################
-CUR_DIR=$(pwd)
-TMP_PATH=${CUR_DIR}/lularobotics_ws;
-if [[ ! -d ${TMP_PATH} ]];then
-    mkdir ${TMP_PATH};
-fi
-TMP_PATH=${CUR_DIR}/lularobotics_ws/src;
-if [[ ! -d ${TMP_PATH} ]];then
-    mkdir ${TMP_PATH};
-fi
-cd ${TMP_PATH}
-TMP_PATH=${CUR_DIR}/lularobotics_ws/src/CMakeLists.txt;
-if [[ ! -e ${TMP_PATH} ]];then
-    catkin_init_workspace
-fi
-
-cd ${CUR_DIR}/lularobotics_ws;
+#CUR_DIR=$(pwd)
+#TMP_PATH=${CUR_DIR}/lularobotics_ws;
+#if [[ ! -d ${TMP_PATH} ]];then
+#    mkdir ${TMP_PATH};
+#fi
+#TMP_PATH=${CUR_DIR}/lularobotics_ws/src;
+#if [[ ! -d ${TMP_PATH} ]];then
+#    mkdir ${TMP_PATH};
+#fi
+#cd ${TMP_PATH}
+#TMP_PATH=${CUR_DIR}/lularobotics_ws/src/CMakeLists.txt;
+#if [[ ! -e ${TMP_PATH} ]];then
+#    catkin_init_workspace
+#fi
+#TMP_PATH=${CUR_DIR}/lularobotics_ws/src/lula_baxter;
+#if [[ ! -d ${TMP_PATH} ]];then
+#    echo -e "clone package for lula_baxter"
+#    git clone https://github.com/lularobotics/lula_baxter.git
+#else
+#    cd ${TMP_PATH}
+#    git pull 
+#fi
+#
+#cd ${CUR_DIR}/lularobotics_ws;
+${SCRIPT_DIR}/update_packages.sh
 catkin_make -DCMAKE_BUILD_TYPE=RelWithDebInfo;
 
 echo -e "###############################################################"
-echo -e "# Your workspace is now setup in ${CUR_DIR}/lularobotics_ws"
+echo -e "# Your workspace and Lula docker image is now setup"
 echo -e "###############################################################"
-echo -e "# To start the basic example you can call"
-echo -e "# bash ${SCRIPT_DIR}/start_example.sh ${CUR_DIR}/lularobotics_ws"
-echo -e "###############################################################"
-echo -e "# To run the basic example do the following:"
-echo -e "# --- terminal 1:"
-echo -e "# cd ${CUR_DIR}/lularobotics_ws"
-echo -e "# source devel/setup.bash"
-echo -e "# roscore"
-echo -e "# --- terminal 2:"
-echo -e "# ..."
-echo -e "###############################################################"
+#echo -e "# To start the basic example you can call"
+#echo -e "# bash ${SCRIPT_DIR}/start_example.sh ${CUR_DIR}/lularobotics_ws"
+#echo -e "###############################################################"
+#echo -e "# To run the basic example do the following:"
+#echo -e "# --- terminal 1:"
+#echo -e "# cd ${CUR_DIR}/lularobotics_ws"
+#echo -e "# source devel/setup.bash"
+#echo -e "# roscore"
+#echo -e "# --- terminal 2:"
+#echo -e "# ..."
+#echo -e "###############################################################"
 }
 
 # copied from get.docker.com
