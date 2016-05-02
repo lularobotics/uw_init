@@ -208,4 +208,6 @@ optimizer.
        "right_w2"
      ],
 
-
+See lula_baxter/lula/baxter/stream_target_main.cpp for examples of how to use
+the API to stream both desired poses and desired configurations. This binary is
+called by the demo scripts (e.g. stream_pose_demo1) mentioned above.

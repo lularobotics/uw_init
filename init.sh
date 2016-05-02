@@ -126,7 +126,11 @@ if [[ "n" == "${USER_CONFIRM_RESULT}" ]];then
     exit 1;
 fi
 
-bash ${SCRIPT_DIR}/data/docker_tools.sh --load-image
+docker pull hub.lularobotics.com/uw_planning
+if [[ "$?" != "0" ]]; then
+  echo -e "ERROR -- could not pull latest image"
+  exit 1
+fi
 
 echo -e "###############################################################"
 echo -e "# We will add the lula packages to a 'lula' subdirectory of this"
