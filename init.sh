@@ -129,11 +129,12 @@ fi
 bash ${SCRIPT_DIR}/data/docker_tools.sh --load-image
 
 echo -e "###############################################################"
-echo -e "# We will setup a workspace in $(pwd)/lularobotics_ws if not existing"
-echo -e "# If existing we will update our repositories"
+echo -e "# We will add the lula packages to a 'lula' subdirectory of this"
+echo -e "# workspace if they are not already there. If they are already "
+echo -e "# there, we will update them."
 user_confirm "# Continue" "y"
 if [[ "n" == "${USER_CONFIRM_RESULT}" ]];then
-    echo -e "stopped since user did not confirm the current directory";
+    echo -e "stopped since user did not confirm the package installation";
     exit 1;
 fi
 
@@ -144,47 +145,13 @@ fi
 # find a baxter_common, ask whether we should install it ourselves. If we 
 # do find one, ask whether we should update it.
 ################################################################################
-#CUR_DIR=$(pwd)
-#TMP_PATH=${CUR_DIR}/lularobotics_ws;
-#if [[ ! -d ${TMP_PATH} ]];then
-#    mkdir ${TMP_PATH};
-#fi
-#TMP_PATH=${CUR_DIR}/lularobotics_ws/src;
-#if [[ ! -d ${TMP_PATH} ]];then
-#    mkdir ${TMP_PATH};
-#fi
-#cd ${TMP_PATH}
-#TMP_PATH=${CUR_DIR}/lularobotics_ws/src/CMakeLists.txt;
-#if [[ ! -e ${TMP_PATH} ]];then
-#    catkin_init_workspace
-#fi
-#TMP_PATH=${CUR_DIR}/lularobotics_ws/src/lula_baxter;
-#if [[ ! -d ${TMP_PATH} ]];then
-#    echo -e "clone package for lula_baxter"
-#    git clone https://github.com/lularobotics/lula_baxter.git
-#else
-#    cd ${TMP_PATH}
-#    git pull 
-#fi
-#
-#cd ${CUR_DIR}/lularobotics_ws;
 ${SCRIPT_DIR}/update_packages.sh
 catkin_make -DCMAKE_BUILD_TYPE=RelWithDebInfo;
 
-echo -e "###############################################################"
-echo -e "# Your workspace and Lula docker image is now setup"
-echo -e "###############################################################"
-#echo -e "# To start the basic example you can call"
-#echo -e "# bash ${SCRIPT_DIR}/start_example.sh ${CUR_DIR}/lularobotics_ws"
-#echo -e "###############################################################"
-#echo -e "# To run the basic example do the following:"
-#echo -e "# --- terminal 1:"
-#echo -e "# cd ${CUR_DIR}/lularobotics_ws"
-#echo -e "# source devel/setup.bash"
-#echo -e "# roscore"
-#echo -e "# --- terminal 2:"
-#echo -e "# ..."
-#echo -e "###############################################################"
+echo -e "#####################################################################"
+echo -e "# Your workspace and Lula docker image are now setup:"
+echo -e "# See the readme.txt to run the demos and check the installation."
+echo -e "#####################################################################"
 }
 
 # copied from get.docker.com
