@@ -171,6 +171,11 @@ the root of the workspace.
 
   where the <demo_scripts> are the same as the simulation scripts.
 
+4. Shutdown everything -- disable the robot, then shutdown the nodes:
+
+  rosrun baxter_tools enable_baxter.py -d
+  rosrun lula_baxter shutdown.sh
+  
 
 ===============================================================================
 How it works
