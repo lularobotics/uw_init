@@ -81,7 +81,7 @@ It will lead you through the process. The only difference is that you don't
 have to re-set your docker credentials after that first time.
 
 ===============================================================================
-Running the demos
+Running the demos in simulation
 ===============================================================================
 
 The following assumes that each terminal has sourced the setup.bash file:
@@ -107,6 +107,11 @@ Playing with continuous optimization
 
    rosrun lula_baxter <demo_script>
 
+4. Shut everything down cleanly using
+
+   rosrun lula_baxter shutdown.sh
+
+
 There are a number of demo scripts. For a first pass, try the following:
 
    rosrun lula_baxter move_to_default
@@ -130,6 +135,41 @@ Existing demos:
    this demo before running the stream_pose_demo1 demo.
 6. move_to_pose2: Move to the first pose of demo 2. It is not necessary to run
    this demo before running the stream_pose_demo2 demo.
+
+===============================================================================
+Running the demos on the real robot
+===============================================================================
+
+The only difference between running demos in simulation and running them on the
+real robot is:
+1. You shouldn't start the simulator. The simulator streams joint state
+   messages on the topic /robot/joint_states to mimic the output of the robot.
+   If it's running while the robot is running and communicating with the same
+   master, it'll confuse the optimizers.
+2. In each terminal you need to run baxter.sh to initiate communications with
+   the robot.
+
+The steps are as follows. In each case, the example runs the script to connect
+to Baxter provided in the lula_baxter library, but any sourcing of the connection
+script baxter.sh will work as well. Each step assumes that you start from 
+the root of the workspace.
+
+1. Activate the robot:
+
+  ./src/lula/lula_baxter/scripts/connect_to_baxter.sh baxter
+  rosrun baxter_tools enable_baxter.py -e
+
+2. In a new terminal, start the continuous optimization:
+
+  ./src/lula/lula_baxter/scripts/connect_to_baxter.sh baxter
+  roslaunch lula_baxter baxter_continuous_optimization.launch
+
+3. Run the demos:
+    
+  ./src/lula/lula_baxter/scripts/connect_to_baxter.sh baxter
+  rosrun lula_baxter <demo_script>
+
+  where the <demo_scripts> are the same as the simulation scripts.
 
 
 ===============================================================================
