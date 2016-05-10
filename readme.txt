@@ -101,11 +101,11 @@ Playing with continuous optimization
 
 2. From a separate terminal, start the continuous optimization node:
    
-   roslaunch lula_baxter baxter_continuous_optimization.launch
+   roslaunch lula_baxter baxter_continuous_optimization.launch side:=<right|left>
 
 3. From a third terminal, run one of the demo commands:
 
-   rosrun lula_baxter <demo_script>
+   rosrun lula_baxter <demo_script> <right|left>
 
 4. Shut everything down cleanly using
 
@@ -114,9 +114,9 @@ Playing with continuous optimization
 
 There are a number of demo scripts. For a first pass, try the following:
 
-   rosrun lula_baxter move_to_default
-   rosrun lula_baxter stream_pose_demo1
-   rosrun lula_baxter stream_pose_demo2
+   rosrun lula_baxter move_to_default <right|left>
+   rosrun lula_baxter stream_pose_demo1 <right|left>
+   rosrun lula_baxter stream_pose_demo2 <right|left>
 
 The visualization will show the target pose as a frame in Rviz; the robot
 tracks the target and convergences to its exact pose once it stops moving.
@@ -162,12 +162,12 @@ the root of the workspace.
 2. In a new terminal, start the continuous optimization:
 
   ./src/lula/lula_baxter/scripts/connect_to_baxter.sh baxter
-  roslaunch lula_baxter baxter_continuous_optimization.launch
+  roslaunch lula_baxter baxter_continuous_optimization.launch side:=<right|left>
 
 3. Run the demos:
     
   ./src/lula/lula_baxter/scripts/connect_to_baxter.sh baxter
-  rosrun lula_baxter <demo_script>
+  rosrun lula_baxter <demo_script> <right|left>
 
   where the <demo_scripts> are the same as the simulation scripts.
 
@@ -222,12 +222,12 @@ optimizer.
 1. Send (or stream) a pose to the robot by sending geometry_msgs/PoseStamped
    messages to the following topic:
    
-   /RieMO/Baxter/DesiredPose
+   /RieMO/Baxter/[Right/Left]/DesiredPose
 
 2. Send (or stream) a configuration to the robot by sending
    lula_baxter/Configuration messages to the following topic:
    
-   /RieMO/Baxter/DesiredConfiguration
+   /RieMO/Baxter/[Right/Left]DesiredConfiguration
 
    The Configuration message requires just a header and a specification 
    of the active joint angles:
@@ -238,19 +238,19 @@ optimizer.
    The ordering of the joints is specified by the list of "generalized
    coordinates" given in the RieMO descriptor file:
 
-   lula_baxter/config/riemo_robot_baxter.json
+   lula_baxter/config/riemo_robot_baxter_[right/left].json
 
    At installation, that specification is set as to control the right arm
    with a joint ordering ranging from most proximal to most distal:
 
      "generalizedCoordinates": [
-       "right_s0",
-       "right_s1",
-       "right_e0",
-       "right_e1",
-       "right_w0",
-       "right_w1",
-       "right_w2"
+       "[right/left]_s0",
+       "[right/left]_s1",
+       "[right/left]_e0",
+       "[right/left]_e1",
+       "[right/left]_w0",
+       "[right/left]_w1",
+       "[right/left]_w2"
      ],
 
 See lula_baxter/lula/baxter/stream_target_main.cpp for examples of how to use
