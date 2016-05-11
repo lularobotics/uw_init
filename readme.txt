@@ -162,7 +162,14 @@ the root of the workspace.
 2. In a new terminal, start the continuous optimization:
 
   ./src/lula/lula_baxter/scripts/connect_to_baxter.sh baxter
-  roslaunch lula_baxter baxter_continuous_optimization.launch side:=<right|left>
+  roslaunch lula_baxter baxter_continuous_optimization.launch \
+      side:=<right|left> \
+      visualize:=true
+
+  (Note that since the simulator isn't running you need to tell the 
+  baxter_continuous_optimization.launch file to additional launch 
+  a visualization node. This just starts rviz; it doesn't start the 
+  simulator.)
 
 3. Run the demos:
     
